@@ -1,0 +1,113 @@
+---
+########################################
+# Servo Configuration
+########################################
+#steering_rate: 0.5 # for TT-02 Drift.
+#  - Server steering angle is calculated angle.
+#    However, the angle of the vehicle depends on the steering structure.
+#    Drift type steering, normal steering. Therefore, use this rate for ajust good angle for your car.
+#servo_min_pulse: 600 # for TSU-03 Servo
+#  - Microseconds of HIGH time at which the servo axis angle becomes 0 degree.
+#    Each servo has different characteristics.
+#servo_max_pulse: 2600 # for TSU-03 Servo
+#  - Microseconds of HIGH time at which the servo axis angle becomes 180 degree.
+#    Each servo has different characteristics.
+#servo_min_angle: 0 # Software value of servo_min_pulse.
+#  - Angle of servo_min_pulse.
+#servo_max_angle: 180 # Software value of servo_max_pulse.
+#  - Angle of servo_max_pulse.
+#servo_neutral_angle: 90 # Neutral steering value.
+#  - This angle is steering center position.
+#servo_delay: 0
+#  - Setup time. 0 is set the target angle soon.
+#    Else, set seconds sleep for move from servo_min_angle to servo_max_angle.
+#    5.0 means from 0 to 180 takes 5.0 seconds.
+#servo_hz: 57.8 # for TEU-105BK
+#  - This value must be the same as motor_hz.
+#    If you have 2 PCA9685 chips, you can change Hz from motor_hz. 
+#servo_min_angle_limit: 55 # for TT02 Drift.
+#  - This is limit of servo angle.
+#    0 to 90 degree is left.
+#    Normally, servo can move 0 to 180 degree. But car steering cannot move such large angle.
+#servo_max_angle_limit: 115 # for TT02 Drift.
+#  - This is limit of servo angle.
+#    90 to 180 degree is right.
+#    Normally, servo can move 0 to 180 degree. But car steering cannot move such large angle.
+#servo_channel: 0
+#  - PWM connector number.
+#servo_busnum: 1
+#  - I2C Bus number.
+#    1 is for Jetson TX2 and Raspberry Pi3.
+#    8 is for Jetson Xavier.
+steering_rate: 0.5 # for TT-02 Drift
+servo_min_pulse: 600 # for TSU-03 Servo
+servo_max_pulse: 2600 # for TSU-03 Servo
+servo_min_angle: 0 # Software value of servo_min_pulse.
+servo_max_angle: 180 # Software value of servo_max_pulse.
+servo_neutral_angle: 85
+servo_delay: 0 # for TSU-03 Servo
+servo_hz: 57.8 # for TRU-08 Receiver
+servo_min_angle_limit: 55 # Maximum left angle for TT-02 Drift
+servo_max_angle_limit: 115 # Maximum right angle for TT-02 Drift
+servo_channel: 0
+servo_busnum: 1
+
+########################################
+# Motor Configuration
+########################################
+#motor_min_pulse: 1184 # Maximum Forward for TEU-105BK
+#  - Microseconds of HIGH time at which the motor is maximum forward speed.
+#motor_max_pulse: 1859 # Maximum Backward for TEU-105BK
+#  - Microseconds of HIGH time at which the motor is maximum backward speed.
+#motor_neutral_pulse: 1606 # for TEU-105BK
+#  - Neutral position of motor.
+#    Normally, the neutral position of the motor is not the median value of the pulse.
+#    The position is shifted to improve the feeling of controll.
+#motor_min_start_pulse: 1565 # for TEU-105BK
+#  - Microseconds of HIGH time at which the motor is start to foward.
+#motor_max_start_pulse: 1660 # for TEU-105BK
+#  - Microseconds of HIGH time at which the motor is start to backward.
+#motor_min_speed: -100
+#  - Software value of motor_max_pulse.
+#    Value of maximum backward speed.
+#motor_max_speed: 100
+#  - Software value of motor_min_pulse.
+#  - Value of maximum forward speed.
+#motor_neutral_speed: 0 # Don't change.
+#  - Motor neutral speed.
+#motor_delay: 0
+#  - Setup time.
+#    0 equals to set the target speed soon.
+#    Else, set seconds sleep for move from motor_min_speed to motor_max_speed.
+#    5.0 means from -100 to 100 speed up takes 5.0 seconds.
+#motor_hz: 57.8 # for TEU-105BK
+#  - This value must be the same value as servo_hz.
+#    If you have 2 PCA9685 chips, you can change Hz from servo_hz. 
+#motor_min_speed_limit: -100
+#  - Limit of backward speed.
+#    If motor_min_speed is -100 and motor_min_speed_limit is -50, then the maximum backward speed limits 50%.
+#    -30 to -50 is good for safety driving.
+#motor_max_speed_limit: 100
+#  - Limit of forward speed.
+#    If motor_max_speed is 100 and motor_max_speed_limit is 50, then the maximum forward speed limits 50%.
+#    30 to 50 is good for safety driving.
+#motor_channel: 1
+#  - PWM connector number.
+#motor_busnum: 1
+#  - I2C Bus number.
+#    1 is for Jetson TX2 and Raspberry Pi3.
+#    8 is for Jetson Xavier.
+motor_min_pulse: 1184 # Maximum Forward for TEU-105BK
+motor_max_pulse: 1859 # Maximum Backward for TEU-105BK
+motor_neutral_pulse: 1606 # for TEU-150BK
+motor_min_start_pulse: 1565 # for TEU-105BK
+motor_max_start_pulse: 1660 # for TEU-105BK
+motor_min_speed: -100 # Software value of motor_max_pulse.
+motor_max_speed: 100 # Software value of motor_min_pulse.
+motor_neutral_speed: 0 # Don't change.
+motor_delay: 1.0
+motor_hz: 57.8 # for TEU-105BK
+motor_min_speed_limit: -100 # Maximum backward speed limit.
+motor_max_speed_limit: 100 # Maximum forward speed limit.
+motor_channel: 1
+motor_busnum: 1
