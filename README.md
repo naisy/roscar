@@ -8,11 +8,12 @@
 sudo apt-get install ros-kinetic-desktop-full
 sudo pip install smbus2
 ```
-terminal 1:<br>
+IP_Address: 192.168.0.56<br>
 ```
 sudo su
 export ROS_MASTER_URI=http://192.168.0.56:11311/
 export ROS_IP=192.168.0.56
+roscore&
 python run_roscar.py
 ```
 
@@ -22,6 +23,7 @@ python run_roscar.py
 sudo apt-get install ros-kinetic-desktop-full
 sudo apt-get install python-pygame
 ```
+Set CAR IP_Address: 192.168.0.56<br>
 ```
 export ROS_MASTER_URI=http://192.168.0.56:11311/
 export ROS_IP=192.168.0.56
