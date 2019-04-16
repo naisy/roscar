@@ -84,7 +84,6 @@ class RosCar():
         rostopic echo /twist_cmd
         """
         rospy.init_node('RoboCarROS', anonymous=True)
-        #rospy.init_node('twist_filter', anonymous=True)
         rospy.Subscriber('/twist_cmd', TwistStamped, self.twist_cmd)
         # current_velocity
         rospy.Subscriber('/current_velocity', TwistStamped, self.current_velocity)
