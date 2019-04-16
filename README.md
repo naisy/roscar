@@ -3,6 +3,8 @@
 
 ## ROSCAR
 ### on Jetson TX2(car)
+[![TX2](https://img.youtube.com/vi/FSd1MBqDlXk/1.jpg)](https://www.youtube.com/watch?v=FSd1MBqDlXk)
+
 #### Requirement
 ```
 sudo apt-get install ros-kinetic-desktop-full
@@ -31,6 +33,8 @@ python joycontrol.py
 ```
 
 ## AutowareCar
+[![TX2](https://img.youtube.com/vi/bYBoUJiRxcw/1.jpg)](https://www.youtube.com/watch?v=bYBoUJiRxcw)
+
 ### Requirement
 * [Autoware](https://github.com/naisy/Autoware/tree/master/docker/JetsonTX2)
 ```
