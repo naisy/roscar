@@ -1,3 +1,20 @@
+"""
+# TERMINAL 1
+ssh ubuntu@192.168.0.xxx (TX2 login)
+# ubuntu user
+roscore &
+# root user
+sudo su
+source /home/ubuntu/catkin_ws/install_isolated/setup.bash
+python run_roscar.py
+# 
+
+# TERMINAL 2
+ssh -C -Y ubuntu@192.168.0.xxx (TX2 login)
+# ubuntu user
+python joycontrol.py
+"""
+
 from lib.roscar import RosCar
 import yaml
 import os
