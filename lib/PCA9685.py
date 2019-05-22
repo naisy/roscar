@@ -135,7 +135,7 @@ class PCA9685(object):
     '''
 
 
-    def __init__(self, bus,value=300,address=0x40):
+    def __init__(self, bus, value=300, address=0x40):
         '''
         bus: bus番号
         value: PCA9685に書き込む初期サーボ位置
@@ -149,17 +149,17 @@ class PCA9685(object):
 
         # PCA9685 全channelの値を初期化する
         # 通電時、PCA9685の全channleの値は、サーボ稼働範囲外の4096になっているのでこれを適切な範囲に設定しておく
-        self.bus.write_byte_data(self.PCA9685_ADDRESS,self.ALL_LED_ON_L,0x00)
-        self.bus.write_byte_data(self.PCA9685_ADDRESS,self.ALL_LED_ON_H,0x00)
-        self.bus.write_byte_data(self.PCA9685_ADDRESS,self.ALL_LED_OFF_L,(value & 0xFF))
-        self.bus.write_byte_data(self.PCA9685_ADDRESS,self.ALL_LED_OFF_H,(value >> 8))
+        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.ALL_LED_ON_L, 0x00)
+        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.ALL_LED_ON_H, 0x00)
+        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.ALL_LED_OFF_L, (value & 0xFF))
+        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.ALL_LED_OFF_H, (value >> 8))
 
         self.bus.write_byte_data(self.PCA9685_ADDRESS, self.MODE2, self.OUTDRV)
         self.bus.write_byte_data(self.PCA9685_ADDRESS, self.MODE1, self.ALLCALL)
         time.sleep(self.WAIT_TIME)
 
         # スリープ状態なら解除する
-        mode = self.bus.read_byte_data(self.PCA9685_ADDRESS,self.MODE1)
+        mode = self.bus.read_byte_data(self.PCA9685_ADDRESS, self.MODE1)
         mode = mode & ~self.SLEEP # SLEEPビットを除去する
         self.bus.write_byte_data(self.PCA9685_ADDRESS, self.MODE1, mode)
         time.sleep(self.WAIT_TIME)
@@ -174,7 +174,7 @@ class PCA9685(object):
     def __del__(self):
         """
         分離したコードでサーボとモーターのどちらかを止めてもPCA9685がスリープに入らないようにするために、この処理はコメントアウトにする。
-        mode = self.bus.read_byte_data(self.PCA9685_ADDRESS,self.MODE1)
+        mode = self.bus.read_byte_data(self.PCA9685_ADDRESS, self.MODE1)
         mode = mode | self.SLEEP # sleep
         # スリープにする
         self.bus.write_byte_data(self.PCA9685_ADDRESS, self.MODE1, mode)
@@ -209,7 +209,7 @@ class PCA9685(object):
         Hz設定。レジスタに書き込む値はprescaleの値となる
         prescale = calc_prescale(hz)
         '''
-        oldmode = self.bus.read_byte_data(self.PCA9685_ADDRESS,self.MODE1)
+        oldmode = self.bus.read_byte_data(self.PCA9685_ADDRESS, self.MODE1)
         newmode = oldmode | self.SLEEP # sleep
 
         #print("prescale:{}".format(prescale))
@@ -273,8 +273,8 @@ class PCA9685(object):
         ''' or
         read_i2c_block_data()は指定したbyte数をバイト配列で返す。1byteしか要らない。16byteを指定しても同じ値が16個並ぶだけ。
         list_of_bytes = 1 # 1byteだけ取る
-        block0 = self.bus.read_i2c_block_data(self.PCA9685_ADDRESS,self.LED0_OFF_L+channel*4,list_of_bytes) # 0-255
-        block256 = self.bus.read_i2c_block_data(self.PCA9685_ADDRESS,self.LED0_OFF_H+channel*4,list_of_bytes) # 桁上がり
+        block0 = self.bus.read_i2c_block_data(self.PCA9685_ADDRESS, self.LED0_OFF_L+channel*4, list_of_bytes) # 0-255
+        block256 = self.bus.read_i2c_block_data(self.PCA9685_ADDRESS, self.LED0_OFF_H+channel*4, list_of_bytes) # 桁上がり
         value = (block256[0]<<8) + block0[0]
         '''
         return value
@@ -287,20 +287,20 @@ class PCA9685(object):
         '''
         value=int(value)
 
-        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.LED0_ON_L+channel*4,0x00)
-        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.LED0_ON_H+channel*4,0x00)
-        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.LED0_OFF_L+channel*4,(value & 0xFF))
-        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.LED0_OFF_H+channel*4,(value >> 8))
+        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.LED0_ON_L+channel*4, 0x00)
+        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.LED0_ON_H+channel*4, 0x00)
+        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.LED0_OFF_L+channel*4, (value & 0xFF))
+        self.bus.write_byte_data(self.PCA9685_ADDRESS, self.LED0_OFF_H+channel*4, (value >> 8))
         ''' or 
-        self.bus.write_i2c_block_data(self.PCA9685_ADDRESS,self.LED0_ON_L+channel*4,[0x00])
-        self.bus.write_i2c_block_data(self.PCA9685_ADDRESS,self.LED0_ON_H+channel*4,[0x00])
-        self.bus.write_i2c_block_data(self.PCA9685_ADDRESS,self.LED0_OFF_L+channel*4,[value & 0xFF])
-        self.bus.write_i2c_block_data(self.PCA9685_ADDRESS,self.LED0_OFF_H+channel*4,[value >> 8])
+        self.bus.write_i2c_block_data(self.PCA9685_ADDRESS, self.LED0_ON_L+channel*4, [0x00])
+        self.bus.write_i2c_block_data(self.PCA9685_ADDRESS, self.LED0_ON_H+channel*4, [0x00])
+        self.bus.write_i2c_block_data(self.PCA9685_ADDRESS, self.LED0_OFF_L+channel*4, [value & 0xFF])
+        self.bus.write_i2c_block_data(self.PCA9685_ADDRESS, self.LED0_OFF_H+channel*4, [value >> 8])
         '''
 
     def get_mode1(self):
         '''
         MODE1のアドレス値を取得する
         '''
-        mode1 = self.bus.read_byte_data(self.PCA9685_ADDRESS,self.MODE1)
+        mode1 = self.bus.read_byte_data(self.PCA9685_ADDRESS, self.MODE1)
         return mode1

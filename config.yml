@@ -39,6 +39,10 @@
 #  - I2C Bus number.
 #    1 is for Jetson TX2 and Raspberry Pi3.
 #    8 is for Jetson Xavier.
+#servo_i2c_address: 0x40
+#  - PCA9685 address
+#    Default is 0x40.
+#    If chip address has been changed, set that address.
 steering_rate: 0.5 # for TT-02 Drift
 servo_min_pulse: 600 # for TSU-03 Servo
 servo_max_pulse: 2600 # for TSU-03 Servo
@@ -51,6 +55,7 @@ servo_min_angle_limit: 55 # Maximum left angle for TT-02 Drift
 servo_max_angle_limit: 115 # Maximum right angle for TT-02 Drift
 servo_channel: 0
 servo_busnum: 1
+servo_i2c_address: 0x40
 
 ########################################
 # Motor Configuration
@@ -97,6 +102,10 @@ servo_busnum: 1
 #  - I2C Bus number.
 #    1 is for Jetson TX2 and Raspberry Pi3.
 #    8 is for Jetson Xavier.
+#motor_i2c_address: 0x40
+#  - PCA9685 address
+#    Default is 0x40.
+#    If chip address has been changed, set that address.
 motor_min_pulse: 1184 # Maximum Forward for TEU-105BK
 motor_max_pulse: 1859 # Maximum Backward for TEU-105BK
 motor_neutral_pulse: 1606 # for TEU-150BK
@@ -111,3 +120,4 @@ motor_min_speed_limit: -100 # Maximum backward speed limit.
 motor_max_speed_limit: 100 # Maximum forward speed limit.
 motor_channel: 1
 motor_busnum: 1
+motor_i2c_address: 0x40

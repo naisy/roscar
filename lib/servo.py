@@ -148,11 +148,12 @@ class Servo():
             self.SERVO_MIN_ANGLE_LIMIT = cfg['servo_min_angle_limit']
             self.SERVO_MAX_ANGLE_LIMIT = cfg['servo_max_angle_limit']
             self.CHANNEL = cfg['servo_channel'] # PCA9685 サーボ接続チャネル
-            self.BUSNUM = cfg['servo_busnum'] # I2C Bus number
+            self.BUSNUM = cfg['servo_busnum'] # PCA9685 I2C Bus number
+            self.I2C_ADDRESS = cfg['servo_i2c_address'] # PCA9685 I2C Bus number
 
             self.bus = smbus.SMBus(self.BUSNUM)
             init_analog = self.angle_to_analog(self.SERVO_NEUTRAL_ANGLE)
-            self.PCA9685 = PCA9685(self.bus, init_analog)
+            self.PCA9685 = PCA9685(bus=self.bus, value=init_analog, address=self.I2C_ADDRESS)
             self.PCA9685.set_hz(self.SERVO_HZ)
             print("hz:{}".format(self.SERVO_HZ))
             self.angle_worker = None

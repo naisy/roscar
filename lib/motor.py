@@ -151,11 +151,12 @@ class Motor():
             self.MOTOR_MIN_SPEED_LIMIT = cfg['motor_min_speed_limit'] # 後進の制限速度。
             self.MOTOR_MAX_SPEED_LIMIT = cfg['motor_max_speed_limit'] # 前進の制限速度。
             self.CHANNEL = cfg['motor_channel'] # PCA9685 サーボ接続チャネル。
-            self.BUSNUM = cfg['motor_busnum'] # I2C Bus number.
+            self.BUSNUM = cfg['motor_busnum'] # PCA9685 I2C Bus number.
+            self.I2C_ADDRESS = cfg['motor_i2c_address'] # PCA9685 I2C Address.
             self.cfg = cfg
             self.bus = smbus.SMBus(self.BUSNUM)
             init_analog = self.speed_to_analog(self.MOTOR_NEUTRAL_SPEED)
-            self.PCA9685 = PCA9685(self.bus, init_analog)
+            self.PCA9685 = PCA9685(bus=self.bus, value=init_analog, address=self.I2C_ADDRESS)
             self.PCA9685.set_hz(self.MOTOR_HZ)
             print("hz:{}".format(self.MOTOR_HZ))
             self.speed_worker = None
