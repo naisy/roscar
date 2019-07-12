@@ -2,14 +2,19 @@ import curses
 
 def main(win):
     win.nodelay(True)
+    win.keypad(True)
     key=""
     win.clear()
     win.addstr("Detected key:")
     last_key = None
     counter = 0
-    while 1:
+    done = False
+    while done == False:
         try:
-            key = win.getkey()
+            key = win.getch()
+            if key == -1:
+                # No input
+                continue
             win.clear()
             win.addstr("Detected key:")
             win.addstr(str(key))
@@ -19,8 +24,11 @@ def main(win):
                 counter = 0
             last_key = key
             win.addstr(" ({})".format(counter))
-            if key == os.linesep:
+            if key == 27: # push ESC key
+                done = True
                 break
+            else:
+                win.refresh()
         except Exception as e:
             # No input
             pass

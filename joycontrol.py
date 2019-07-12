@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
-# Logcool F310の裏面にあるX-D switchをDに設定するとTX2で認識する
+# Logicool F310の裏面にあるX-D switchをDに設定するとTX2で認識する
+# Logicool F710の場合は、X-D switchをDにして、正面の電源ボタン（Logicoolロゴのボタン）を押すとTX2で認識する
 # roscore&
 # python run_roscar.py
 # python joycontrol.py
