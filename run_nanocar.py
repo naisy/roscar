@@ -1,11 +1,15 @@
 """
-sudo su
-export ROS_MASTER_URI=http://192.168.0.48:11311/
-export ROS_IP=192.168.0.48
-source /home/ubuntu/catkin_ws/install_isolated/setup.bash
+# 1/10 RC Carモデル
 
+# ROS MasterのROS_MASTER_URIをlocalhostにすると、外部に配信されなくなります。 
+
+# Jetson Nano (ip_address: 192.168.0.1)
+export ROS_MASTER_URI=http://192.168.0.1:11311/
+export ROS_IP=192.168.0.1
+source /home/ubuntu/catkin_ws/install_isolated/setup.bash
 rosparam set use_sim_time false
 rostopic echo /cmd_vel
+
 python run_nanocar.py
 """
 
@@ -38,3 +42,4 @@ if __name__ == '__main__':
     cfg = load_config()
     roscar = RosCar(cfg)
     roscar.listener()
+
