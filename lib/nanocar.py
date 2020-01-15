@@ -2,21 +2,16 @@
 # coding: utf-8
 
 """
-# TurtleBot3 ROS Topicを読み込み、サーボ/モーターを制御するクラス
-
-# ROS MasterのROS_MASTER_URIをlocalhostにすると、外部に配信されなくなります。 
-
-# TX2
-192.168.0.48
-export ROS_MASTER_URI=http://192.168.0.48:11311/
-export ROS_IP=192.168.0.48
-source /home/ubuntu/catkin_ws/install_isolated/setup.bash
-
-rostopic echo /cmd_vel
+# 1/10 RC Carモデル
+# Teb Local Plannerのcar likeをベース
+# アッカーマン運動力学に基づく角度、速度を配信
+# サーボ/モーターを制御
 """
 
 from lib.servo import Servo
 from lib.motor import Motor
+from lib.cmd_vel_to_ackermann_drive import AckermannPublisher
+from ackermann_msgs.msg import AckermannDriveStamped
 import rospy
 from geometry_msgs.msg import Twist
 import math
@@ -47,8 +42,6 @@ class RosCar():
         self.motor.set_speed(self.MOTOR_NEUTRAL_SPEED, delay=0)
 
         self.speed = self.MOTOR_NEUTRAL_SPEED
-        self.back_in = False
-        self.back_start_time = None
         return
 
     def __del__(self):
@@ -58,73 +51,66 @@ class RosCar():
 
     def listener(self):
         """
-        READ ROS TOPICS AND RUN FUNCTION BY HZ.
-
+        ROS Topicの更新時に処理を行う設定
         rosnode list
-        rosnode info /twist_filter
         rostopic echo /cmd_vel
+        rostopic echo /ackermann_cmd
         """
         rospy.init_node('ROSCarNano', anonymous=True)
-        rospy.Subscriber('/cmd_vel', Twist, self.cmd_vel)
+
+        """
+        アッカーマン運動力学
+        """
+        ackermann = AckermannPublisher()
+        ackermann.add()
+        rospy.Subscriber('/ackermann_cmd', AckermannDriveStamped, self.ackermann_cmd)
 
         # spin() simply keeps python from exiting until this node is stopped
         rospy.spin()
         return
 
-    def cmd_vel(self, values):
+    def ackermann_cmd(self, values):
         """
         ステアリング・速度のターゲット値の処理
-
-        ステアリング値のomegaはターゲット角速度である。現在の速度を加味してomegaを算出しなければならない
-
-        self.target_speed: target speed (m/s)
+        ステアリング値のsteering_angleは角度(rad)なので、degreeに変換する
+        speed: m/s
+        target_speed: motor power %
+          # map(指示を受けた速度(m/s), 指示速度の後方最高速度m/s, 指示速度の最高速度m/s, モーター後方最高出力%, モーター前方最高出力%)
+          # ここでは前後モーター最高出力は100%として、デバイス設定時に車両設定の速度制限を適用する。
         """
+        print("/ackermann_cmd: {}".format(values))
+        #speed = abs(values.drive.speed) # no backwords
+        speed = values.drive.speed
+        target_speed = map(speed, -0.28, 0.28, -100.0, 100.0)
+        
         """
-        Autoware 1.9.1にバック機能は無い。
-        そのため速度は負の値は正の値として扱う。
+        ステアリング角
+        アッカーマン運動力学のステアリング角を利用する
         """
-        print("/cmd_vel: {}".format(values))
-        speed = abs(values.linear.x)
-        target_speed = map(speed, 0.0, 0.22, 0.0, 30.0)
-
-        """
-        Autowareの角速度は右カーブがマイナス、左カーブがプラス。
-        omega: rad/s and 10 Hz
-        1 processing = 1 Hz = 0.1 * omega
-        left/right = -1 * omega
-        """
-        omega = values.angular.z
-
-        """
-        omegaはtarget_speedが時速2kmの時、ベストマッチ。
-        速度が上がった時、それに応じてomegaを減算させる。
-        """
-        print("omega: {} speed: {}".format(omega, speed))
+        angle_rad = values.drive.steering_angle
         self.set_speed(target_speed)
-        self.set_angle_rad(omega)
+        self.set_angle_rad(angle_rad)
 
-        return
-
-    def omega_to_angle(self, omega):
+    def rad_to_angle(self, angle_rad):
         """
-        角速度ωをサーボ可動域に変換する。
-        omegaは右カーブがマイナス、左カーブがプラス。
+        angle_radをサーボ可動域に変換する。
+        angle_radは右カーブがマイナス、左カーブがプラス。
         サーボは右カーブが90-180度、左カーブが0-90度となるため、
-        omegaの正負を逆にしてdegreeに変換してから90度加える。
+        angle_radの正負を逆にしてdegreeに変換してから90度加える。
         ω(rad/s)
-        θ= ω*180/pi (deg/s)
+        θ= angle_rad*180/pi (deg/s)
         rad = θ*pi/180
         """
-        omega = -1.0 * omega
-        theta = float(omega)*float(180)/math.pi
+        angle_rad = -1.0 * angle_rad
+        theta = float(angle_rad)*float(180)/math.pi
         angle = 90.0 - (180.0 - theta)/2.0
         return angle
 
-    def set_angle_rad(self, omega):
+    def set_angle_rad(self, angle_rad):
         """
         omega: rad/s
         """
-        steering_angle = self.omega_to_angle(omega)
+        steering_angle = self.rad_to_angle(angle_rad)
         #print("omega to angle: {} -> {}".format(omega, steering_angle))
         steering_angle = int(float(steering_angle) * float(self.STEERING_RATE))
         steering_angle = self.STEERING_NEUTRAL + steering_angle
@@ -148,8 +134,10 @@ class RosCar():
             motor_speed = int(float(motor_speed) * float(self.MOTOR_FORWARD_SPEED_RATE))
         elif motor_speed < 0:
             motor_speed = int(float(motor_speed) * float(self.MOTOR_BACK_SPEED_RATE))
+        print("motor: {}".format(motor_speed))
         self.motor.set_speed(motor_speed)
 
     def brake(self, value):
         if value.data:
             self.motor.set_speed(self.MOTOR_NEUTRAL_SPEED, delay=0)
+
