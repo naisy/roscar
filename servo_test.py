@@ -30,23 +30,23 @@ def main():
 
         steering = Servo(cfg)
 
-        delay = 0.4
-        angle = 60
+        delay = 0.1
+        angle = 85
         steering.set_angle(angle)
         time.sleep(1)
         for i in range(10):
-            angle = 120
+            angle = 70
             steering.set_angle(angle, delay)
-            time.sleep(0.5)
-            angle = 90
+            time.sleep(1)
+            angle = 85
             steering.set_angle(angle, delay)
-            time.sleep(0.5)
-            angle = 120
+            time.sleep(1)
+            angle = 100
             steering.set_angle(angle)
-            time.sleep(0.5)
-            angle = 60
+            time.sleep(1)
+            angle = 85
             steering.set_angle(angle, delay)
-            time.sleep(0.5)
+            time.sleep(1)
             
 
     except:
@@ -54,7 +54,7 @@ def main():
         traceback.print_exc()
     finally:
         if steering is not None:
-            angle = 90
+            angle = 85
             steering.set_angle(angle)
 
     print("end")

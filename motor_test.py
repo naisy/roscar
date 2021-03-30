@@ -63,10 +63,10 @@ def main():
         # Setting the "BACKWARD" value to the value will apply the brake. (It is probably the function of ESC.)
 
         # BACKWORD: 394(START) - 440(MAX SPEED)
-        speed = -100
+        speed = -30 # 30% backword throttle
         delay = 5.0
         for i in range(2):
-            speed = 100
+            speed = 30 # 30% throttle
             motor.set_speed(speed, delay)
             time.sleep(2.5)
             speed = 0
