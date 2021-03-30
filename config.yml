@@ -44,6 +44,7 @@
 #    Default is 0x40.
 #    If chip address has been changed, set that address.
 steering_rate: 0.5 # for TT-02 Drift
+servo_reverse: False
 servo_min_pulse: 600 # for TSU-03 Servo
 servo_max_pulse: 2600 # for TSU-03 Servo
 servo_min_angle: 0 # Software value of servo_min_pulse.
@@ -106,6 +107,7 @@ servo_i2c_address: 0x40
 #  - PCA9685 address
 #    Default is 0x40.
 #    If chip address has been changed, set that address.
+motor_reverse: False
 motor_min_pulse: 1080 # Maximum Forward for TEU-105BK
 motor_max_pulse: 1980 # Maximum Backward for TEU-105BK
 motor_neutral_pulse: 1520 # for TEU-150BK
