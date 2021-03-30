@@ -17,7 +17,7 @@ class RCCar():
         self.STEERING_RATE        = cfg['steering_rate'] # Server steering angle is fomula angle. But car_client depends on car. Drift type steering, normal steering, etc. Therefore, use this rate for ajust good angle.
         self.MOTOR_NEUTRAL_SPEED  = cfg['motor_neutral_speed']
         self.MOTOR_FORWARD_SPEED_RATE = float(cfg['motor_max_speed_limit'])/float(100) # Server max speed is 100. But car_client depends on config parameter.
-        self.MOTOR_BACK_SPEED_RATE    = float(cfg['motor_min_speed_limit'])/float(-100) # Server min speed is -100. But car_client depends on config parameter.
+        self.MOTOR_BACK_SPEED_RATE    = float(cfg['motor_min_speed_limit'])/float(100) # Server min speed is -100. But car_client depends on config parameter.
 
         self.steering = Servo(cfg)
         self.motor = Motor(cfg)
